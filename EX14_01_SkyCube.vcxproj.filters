@@ -24,54 +24,83 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source\cpp\InitShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InitShader.cpp">
-      <Filter>Source Files\Util</Filter>
+    <ClCompile Include="Source\cpp\LoadBitmap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LoadBitmap.cpp">
-      <Filter>Source Files\Util</Filter>
+    <ClCompile Include="Source\cpp\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyLoadBitmap.cpp">
-      <Filter>Source Files\Util</Filter>
+    <ClCompile Include="Source\cpp\MyLoadBitmap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="quad_fshader.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="quad_vshader.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
+    <None Include="Source\glsl\quad_fshader.glsl" />
+    <None Include="Source\glsl\quad_vshader.glsl" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GraphicsObject.h">
+    <ClInclude Include="Source\Header\Angel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Angel.h">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="mat.h">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="vec.h">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Source\Header\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
+    <ClInclude Include="Source\Header\CheckError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="Source\Header\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TexturedQuad.h">
+    <ClInclude Include="Source\Header\GraphicsObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Header\mat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\TexturedQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Skybox\ww_b.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Skybox\ww_d.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Skybox\ww_f.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Skybox\ww_l.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Skybox\ww_r.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Skybox\ww_u.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Brick.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\trees.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\zebra.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -39,14 +39,17 @@ vec2 mapcoords[12] = {
 
 class TexCoords
 {
-	double x0, x1, y1, y2;
+	float x0, x1, y0, y1;
 
-	vec2* getCoords()
+	vector<vec2> getCoords()
 	{
-		vec2 coords[6] =
+		vec2 v = vec2(0,0);
+		v = vec2(x0,y0);
+		
+		vector<vec2> coords;
 		{
-			vec2(x0, y0), vec2(x0, y0), vec2(x0, y0),
-			vec2(x0, y0), vec2(x0, y0), vec2(x0, y0)
+			coords.push_back(vec2(x0, y0)); coords.push_back(vec2(x0, y0)); coords.push_back(vec2(x0, y0));
+			coords.push_back(vec2(x0, y0)); coords.push_back(vec2(x0, y0)); coords.push_back(vec2(x0, y0));
 		};
 
 		return coords;
@@ -57,12 +60,21 @@ class TexturedQuad : public graphics_object
 {
 public:
 	string text;
-	rect textCoords;
+	TexCoords textCoords;
 
 	TexturedQuad(string texture) : graphics_object("texQuad") { text = texture; }
 
 	void init_data()
-	{  // Data hard coded for the "tree"
+	{  
+		// unit quad
+		point4  quat_verts[4] = {
+			point4(-1.0, 1.0, 0.0, 1.0),
+			point4(1.0, 1.0, 0.0, 1.0),
+			point4(1.0, -1.0, 0.0, 1.0),
+			point4(-1.0, -1.0, 0.0, 1.0),
+		};
+
+
 	}
 
 	void init_VAO()
@@ -100,12 +112,12 @@ public:
 		glVertexAttribPointer(uniforms[0], 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 		GL_CHECK_ERRORS
 
-			// Buffer for the colors
-			glEnableVertexAttribArray(uniforms[1]);
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(colors), &(colors[0]), GL_STATIC_DRAW);
-		glVertexAttribPointer(uniforms[1], 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-		GL_CHECK_ERRORS
+		//	// Buffer for the colors
+		//	glEnableVertexAttribArray(uniforms[1]);
+		//glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(colors), &(colors[0]), GL_STATIC_DRAW);
+		//glVertexAttribPointer(uniforms[1], 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+		//GL_CHECK_ERRORS
 
 			// Buffer for the mapcoord
 			glEnableVertexAttribArray(uniforms[2]);
