@@ -43,7 +43,7 @@ int MyLoadBitmap(char *filename, GLenum  target, bool AlphaBlend = false )
     BITMAPINFOHEADER infoheader;
     RGBTRIPLE rgb;
 	
-	texture_num++; // The counter of the current texture is increased
+	//texture_num++; // The counter of the current texture is increased
     
 	if( (l_file = fopen(filename, "rb"))==NULL) return (-1); // Open the file for reading
     
@@ -107,5 +107,5 @@ int MyLoadBitmap(char *filename, GLenum  target, bool AlphaBlend = false )
 
     free(l_texture); // Free the memory we used to load the texture
 
-    return (texture_num); // Returns the current texture OpenGL ID
+    return (texture_num++); // Returns the current texture OpenGL ID and increments
 }

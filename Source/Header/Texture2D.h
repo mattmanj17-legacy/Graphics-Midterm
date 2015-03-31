@@ -3,7 +3,7 @@
 
 #include "texture.h"
 
-int textureNum = GL_TEXTURE1;
+int texture_num = GL_TEXTURE1;
 
 class Texture2D
 {
@@ -11,21 +11,16 @@ private:
 	GLuint thisTexture;
 	char* fileName;
 
-	~Texture2D()
-	{
-		glDeleteTextures(1, &texid );
-	}
 public:
 	GLuint texid;
 
 	Texture2D(char* fName)
 	{
 		fileName = fName;
-		thisTexture = textureNum++;
-		glActiveTexture(thisTexture);
+		glActiveTexture(texture_num);
 		glGenTextures(1, &texid);
 		glBindTexture(GL_TEXTURE_2D, texid);
-		MyLoadBitmap(fileName, GL_TEXTURE_2D , true);
+		thisTexture = MyLoadBitmap(fileName, GL_TEXTURE_2D , true);
 	}
 
 	void setActive()
@@ -40,6 +35,11 @@ public:
 	    // Prevent alpha values of less than 0.1 from writing out the the depth test buffer.
 	    glAlphaFunc ( GL_GREATER, 0.1 ) ;
         glEnable ( GL_ALPHA_TEST ) ;
+	}
+
+	~Texture2D()
+	{
+		glDeleteTextures(1, &texid );
 	}
 };
 

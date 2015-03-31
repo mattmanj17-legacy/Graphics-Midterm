@@ -6,21 +6,15 @@
 class Camera
 {
 private:
-	static Camera* instance;
-
+	Camera(Camera const&);
+	void operator=(Camera const&);
 	Camera(){}
 public:
 	static Camera* GetInstance()
 	{
-		static bool instanceSet = false;
-
-		if(instanceSet == false)
-		{
-			instance = new Camera();
-			instanceSet = true;
-		}
+		static Camera instance;
 		
-		return instance;
+		return &instance;
 	}
 
 	mat4 projection;
@@ -28,7 +22,7 @@ public:
 
 	mat4 GetCameraMatrix()
 	{
-		projection * transformMatrix;
+		return projection * transformMatrix;
 	}
 };
 

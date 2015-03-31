@@ -10,7 +10,9 @@ out vec2 vUV;
 
 void main() 
 {
-  gl_Position = VertexTransform*vPosition;
+  gl_Position = Transform*vPosition;
+
+  vec4 temp = vNormal;
 
   vUV = vTexCoord;
 } 

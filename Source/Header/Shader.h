@@ -17,10 +17,7 @@ typedef unsigned int GLuint;
 class Shader
 {
 private:
-	~Shader()
-	{
-		glDeleteProgram(id);
-	}
+	
 public:
 	string vShader;
 	string fShader;
@@ -34,8 +31,11 @@ public:
 
 	GLuint id;
 	
-	void init()
+	Shader(string v, string f)
 	{
+		vShader = v;
+		fShader = f;
+		
 		id  = InitShader(vShader.c_str(), fShader.c_str());
 		GL_CHECK_ERRORS
 
@@ -52,6 +52,11 @@ public:
 	{
 		glUseProgram(id);
 		GL_CHECK_ERRORS
+	}
+
+	~Shader()
+	{
+		glDeleteProgram(id);
 	}
 };
 

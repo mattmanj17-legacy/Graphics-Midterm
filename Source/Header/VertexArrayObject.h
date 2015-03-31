@@ -38,13 +38,7 @@ private:
 	GLuint normalBuffer_id;
 	GLuint texCoordBuffer_id;
 
-	~VertexArrayObject()
-	{
-		glDeleteBuffers(1, &positionBuffer_id);
-		glDeleteBuffers(1, &normalBuffer_id);
-		glDeleteBuffers(1, &normalBuffer_id);
-		glDeleteVertexArrays(1, &vao);
-	}
+	
 public:
 	Transform transform;
 
@@ -77,6 +71,7 @@ public:
 		GL_CHECK_ERRORS
 		// attach buffer to correct vertex attribute
 		glVertexAttribPointer(program->normalBuffer, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
+		GL_CHECK_ERRORS
 		glEnableVertexAttribArray(program->normalBuffer);
 		GL_CHECK_ERRORS
 
@@ -112,6 +107,14 @@ public:
 		glUseProgram(0);
 		glBindVertexArray(0);
 		GL_CHECK_ERRORS
+	}
+
+	~VertexArrayObject()
+	{
+		glDeleteBuffers(1, &positionBuffer_id);
+		glDeleteBuffers(1, &normalBuffer_id);
+		glDeleteBuffers(1, &normalBuffer_id);
+		glDeleteVertexArrays(1, &vao);
 	}
 };
 
