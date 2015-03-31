@@ -13,7 +13,7 @@ public:
 	vec3 posision;
 	vec3 scale;
 	
-	mat4 getModelView
+	mat4 getModelView();
 };
 
 #endif

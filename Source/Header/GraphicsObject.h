@@ -32,6 +32,14 @@ int texture_num = GL_TEXTURE1;
 
 class graphics_object 
 {
+private:
+	void init_VAO()
+	{
+		// Init the VAO for this object on the graphics card
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+		GL_CHECK_ERRORS
+	};         // Second: init VAO function
 protected:
 	// Data for a graphics object
 	string name; 
@@ -53,22 +61,50 @@ protected:
 	GLuint uniforms[MAX_UNIFORMS];
 	GLuint texMapLocation;
 
-public:
-	graphics_object( string Name ) : name( Name ) { this_texture = texture_num++; };
-	
+	void triangle( point4 a, point4 b, point4 c )
+	{	 
+		 vertex.push_back( a );
+		 vertex.push_back( b );
+		 vertex.push_back( c );
+	}
+
+	void quad(point4 a, point4 b, point4 c, point4 d)
+	{	 
+		 triangle( a, b, c );
+		 triangle( a, c, d );
+	}
+
 	virtual void init_data() = 0;	     // First:  init data function to set up normal and vertex and texture map coords if applicable
-	virtual void init_VAO() = 0;         // Second: init VAO function
+	
 	virtual void init_VBO() = 0;         // Third:  init VBO function
 	virtual void init_shader() = 0;	     // Fourth: init shader function to set up program
 	virtual void init_texture_map() = 0; // Fifth:  init texture map function
+
+	void init()
+	{
+		init_data();
+		init_VAO();
+		init_VBO();
+		init_shader();
+		init_texture_map();
+	}
+
+	virtual void cleanup() = 0;   // must provide a cleanup function
+
+	~graphics_object()
+	{
+		cleanup();
+	}
+
+public:
+	graphics_object( string Name ) : name( Name ) { this_texture = texture_num++; };
 
 	virtual void start_shader() = 0;     // Called from Draw: Start the shader for this object
 	virtual void stop_shader() = 0;      // Called from Draw: Stop the shader for this object
 
 	GLuint get_shader_id() { return program;	}
 	virtual void draw() { };      // must override draw 
-	virtual void cleanup() = 0;   // must provide a cleanup function
-
+	
 };
 
 
