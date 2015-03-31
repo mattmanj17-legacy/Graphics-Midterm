@@ -52,25 +52,28 @@
     <ClInclude Include="Source\Header\CheckError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Header\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Header\GraphicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Header\mat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Header\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Header\TexturedQuad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Header\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Header\vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\Texture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\TriMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\VertexArrayObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

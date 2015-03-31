@@ -25,13 +25,14 @@
     <ClInclude Include="Source\Header\Angel.h" />
     <ClInclude Include="Source\Header\Camera.h" />
     <ClInclude Include="Source\Header\CheckError.h" />
-    <ClInclude Include="Source\Header\GameObject.h" />
-    <ClInclude Include="Source\Header\GraphicsObject.h" />
     <ClInclude Include="Source\Header\mat.h" />
+    <ClInclude Include="Source\Header\Shader.h" />
     <ClInclude Include="Source\Header\texture.h" />
-    <ClInclude Include="Source\Header\TexturedQuad.h" />
+    <ClInclude Include="Source\Header\Texture2D.h" />
     <ClInclude Include="Source\Header\Transform.h" />
+    <ClInclude Include="Source\Header\TriMesh.h" />
     <ClInclude Include="Source\Header\vec.h" />
+    <ClInclude Include="Source\Header\VertexArrayObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Brick.bmp" />

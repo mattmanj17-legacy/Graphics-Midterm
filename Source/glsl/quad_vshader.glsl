@@ -1,17 +1,16 @@
 #version 150
 
 uniform mat4 Transform;
-uniform mat4 CameraTransform;
-uniform mat4 Projection;
 
 in vec4 vPosition;
-in vec2 vMapCoord;
+in vec4 vNormal;
+in vec2 vTexCoord;
 
-out vec2 vSR;
+out vec2 vUV;
 
 void main() 
 {
-  gl_Position = Projection*CameraTransform*Transform*vPosition;
+  gl_Position = VertexTransform*vPosition;
 
-  vSR = vMapCoord;
+  vUV = vTexCoord;
 } 

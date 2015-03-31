@@ -1,13 +1,35 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include "mat.h"
+
 class Camera
 {
-	GLfloat  zoom = 1.0;         // Translation factor
+private:
+	static Camera* instance;
 
-	GLfloat  fovy = 60.0;		 // Field-of-view in Y direction angle (in degrees)
-	GLfloat  aspect = 1.0;       // Viewport aspect ratio
-	GLfloat  zNear = 0.5, zFar = 1000.0;
+	Camera(){}
+public:
+	static Camera* GetInstance()
+	{
+		static bool instanceSet = false;
+
+		if(instanceSet == false)
+		{
+			instance = new Camera();
+			instanceSet = true;
+		}
+		
+		return instance;
+	}
+
+	mat4 projection;
+	mat4 transformMatrix;
+
+	mat4 GetCameraMatrix()
+	{
+		projection * transformMatrix;
+	}
 };
 
 #endif
