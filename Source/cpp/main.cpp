@@ -19,11 +19,9 @@ using namespace std;
 
 typedef vec4 point4;
 
-GLfloat  zoom = 1.0;         // Translation factor
-
 GLfloat  fovy = 60.0;		 // Field-of-view in Y direction angle (in degrees)
 GLfloat  aspect = 1.0;       // Viewport aspect ratio
-GLfloat  zNear = 0.5, zFar = 1000.0;
+GLfloat  zNear = 0.1, zFar = 1000.0;
 
 VertexArrayObject* myVAO;
 TriMesh* quadMesh;
@@ -35,7 +33,8 @@ void display( void )
 	glClearColor(1.0,1.0,1.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );  /*clear the window */
 
-	Camera::GetInstance()->projection = Perspective( fovy, aspect, zNear, zFar ) * Translate( 0.0, 0.0, -zoom);
+	//Camera::GetInstance()->projection = Perspective( fovy, aspect, zNear, zFar );
+	//camera transform
 
 	myVAO->draw();
 
@@ -70,7 +69,7 @@ void makeQuad(TriMesh* mesh, vec4 a, vec4 b, vec4 c, vec4 d)
 	mesh->addPoint(c, vec2(0,0));
 
 	mesh->addPoint(d, vec2(0,0));
-	mesh->addPoint(b, vec2(0,0));
+	mesh->addPoint(a, vec2(0,0));
 	mesh->addPoint(c, vec2(0,0));
 }
 
@@ -78,10 +77,11 @@ void init()
 {   
 	init_gl();			   
 
-	Camera::GetInstance()->projection = Perspective( fovy, aspect, zNear, zFar ) * Translate( 0.0, 0.0, -zoom);
+	//work on camera code!!
+	Camera::GetInstance()->projection = Perspective( fovy, aspect, zNear, zFar );
 
-	point4  eye( 0.0, 0.0, 0.0, -1 );
-	point4  at( 0.0, 0.0, 0, 0 );
+	point4  eye( 0.0, 0.0, -1.0, 0.0 );
+	point4  at( 0.0, 0.0, 0.0, 0.0 );
 	vec4    up( 0.0, 1.0, 0.0, 0.0 );
 
 	Camera::GetInstance()->transformMatrix = LookAt( eye, at, up );

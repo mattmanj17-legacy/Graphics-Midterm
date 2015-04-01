@@ -22,12 +22,12 @@ public:
 	string vShader;
 	string fShader;
 	
-	GLuint transformAttribute;
-	GLuint textureAttribute;
+	GLuint transformAtribId;
+	GLuint textureAtribId;
 
-	GLuint positionBuffer;
-	GLuint normalBuffer;
-	GLuint texCoordBuffer;
+	GLuint vPositionAtribId;
+	GLuint vNormalAtribId;
+	GLuint vTexCoordAtribId;
 
 	GLuint id;
 	
@@ -38,19 +38,19 @@ public:
 		
 		id  = InitShader(vShader.c_str(), fShader.c_str());
 		GL_CHECK_ERRORS
-
-		transformAttribute = glGetAttribLocation(id, "Transform");	
-		textureAttribute = glGetAttribLocation(id, "Tex"); 
-
-		positionBuffer = glGetAttribLocation(id, "vPosition"); 
-		normalBuffer = glGetUniformLocation(id, "vNormal");
-		texCoordBuffer = glGetUniformLocation(id, "vTexCoord");
-		GL_CHECK_ERRORS
-	}
-
-	void setActive()
-	{
 		glUseProgram(id);
+		GL_CHECK_ERRORS
+
+		transformAtribId = glGetUniformLocation(id, "Transform");
+		GL_CHECK_ERRORS
+		textureAtribId = glGetUniformLocation(id, "Tex");
+		GL_CHECK_ERRORS
+
+		vPositionAtribId = glGetAttribLocation(id, "vPosition");
+		GL_CHECK_ERRORS
+		vNormalAtribId = glGetUniformLocation(id, "vNormal");
+		GL_CHECK_ERRORS
+		vTexCoordAtribId = glGetUniformLocation(id, "vTexCoord");
 		GL_CHECK_ERRORS
 	}
 

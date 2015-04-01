@@ -1,12 +1,13 @@
-#version 150
+#version 330
 
-uniform sampler2D Tex;
+//uniform sampler2D Tex;
 
-in vec2 vUV;
+//in vec2 vUV;
 
 out vec4 fColor;
 
 void main()
 {
-	fColor = texture(Tex, vUV);
+	//vec4 temp = texture(Tex,vec2(1,1));
+	fColor = vec4(1.0,0.0,0.0,1.0);
 }

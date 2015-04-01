@@ -3,31 +3,46 @@
 
 #include "texture.h"
 
-int texture_num = GL_TEXTURE1;
+#define GL_CHECK_ERRORS \
+{ \
+	int err=glGetError(); \
+	if (err!=0) \
+	{   cout << "OpenGL Error: " << err << endl; \
+		assert(err == GL_NO_ERROR); \
+	} \
+}
+
+int currentTextureUnit = GL_TEXTURE1;
 
 class Texture2D
 {
 private:
-	GLuint thisTexture;
+	GLuint textureUnit;
 	char* fileName;
 
 public:
-	GLuint texid;
+	GLuint id;
 
 	Texture2D(char* fName)
 	{
 		fileName = fName;
-		glActiveTexture(texture_num);
-		glGenTextures(1, &texid);
-		glBindTexture(GL_TEXTURE_2D, texid);
-		thisTexture = MyLoadBitmap(fileName, GL_TEXTURE_2D , true);
+		glActiveTexture(currentTextureUnit);
+		GL_CHECK_ERRORS
+		glGenTextures(1, &id);
+		GL_CHECK_ERRORS
+		glBindTexture(GL_TEXTURE_2D, id);
+		GL_CHECK_ERRORS
+		textureUnit = MyLoadBitmap(fileName, GL_TEXTURE_2D , true);
+		GL_CHECK_ERRORS
 	}
 
 	void setActive()
 	{
 		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(thisTexture);
-		glBindTexture(GL_TEXTURE_2D, texid);
+		glActiveTexture(textureUnit);
+		GL_CHECK_ERRORS
+		glBindTexture(GL_TEXTURE_2D, id);
+		GL_CHECK_ERRORS
 
 		glEnable(GL_BLEND);
 	    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -39,7 +54,7 @@ public:
 
 	~Texture2D()
 	{
-		glDeleteTextures(1, &texid );
+		glDeleteTextures(1, &id );
 	}
 };
 

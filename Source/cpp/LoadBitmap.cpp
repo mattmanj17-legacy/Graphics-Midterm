@@ -34,7 +34,7 @@ using namespace std;
  * This function loads a bitmap file and return the OpenGL reference ID to use that texture
  *
  *********************************************************/
-extern int texture_num;
+extern int currentTextureUnit;
 
 int MyLoadCubeMapBitmap(char *filename, GLenum  target ) 
 {
@@ -47,7 +47,7 @@ int MyLoadCubeMapBitmap(char *filename, GLenum  target )
     BITMAPINFOHEADER infoheader;
     RGBTRIPLE rgb;
 
-    //texture_num++; // The counter of the current texture is increased
+    //currentTextureUnit++; // The counter of the current texture is increased
 
     if( (l_file = fopen(filename, "rb"))==NULL) return (-1); // Open the file for reading
     int sword = sizeof(WORD);
@@ -111,5 +111,5 @@ int MyLoadCubeMapBitmap(char *filename, GLenum  target )
 
     free(l_texture); // Free the memory we used to load the texture
 
-    return (texture_num++); // Returns the current texture OpenGL ID and increments
+    return (currentTextureUnit++); // Returns the current texture OpenGL ID and increments
 }

@@ -1,18 +1,18 @@
-#version 150
+#version 330
 
 uniform mat4 Transform;
 
 in vec4 vPosition;
-in vec4 vNormal;
-in vec2 vTexCoord;
+//in vec4 vNormal;
+//in vec2 vTexCoord;
 
-out vec2 vUV;
+//out vec2 vUV;
 
 void main() 
 {
   gl_Position = Transform*vPosition;
 
-  vec4 temp = vNormal;
+  //vec4 temp = vNormal;
 
-  vUV = vTexCoord;
+  //vUV = vTexCoord;
 } 

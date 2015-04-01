@@ -38,7 +38,6 @@ private:
 	GLuint normalBuffer_id;
 	GLuint texCoordBuffer_id;
 
-	
 public:
 	Transform transform;
 
@@ -60,19 +59,19 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * mesh->size(), &(mesh->positions[0]), GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
 		// attach buffer to correct vertex attribute
-		glVertexAttribPointer(program->positionBuffer, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
-		glEnableVertexAttribArray(program->positionBuffer);
+		glVertexAttribPointer(program->vPositionAtribId, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
+		glEnableVertexAttribArray(program->vPositionAtribId);
 		GL_CHECK_ERRORS
 
-		// fill normal buffer from mesh
+		/*// fill normal buffer from mesh
 		glGenBuffers(1, &normalBuffer_id);
 		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * mesh->size(), &(mesh->normals[0]), GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
 		// attach buffer to correct vertex attribute
-		glVertexAttribPointer(program->normalBuffer, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
+		glVertexAttribPointer(program->vNormalAtribId, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
 		GL_CHECK_ERRORS
-		glEnableVertexAttribArray(program->normalBuffer);
+		glEnableVertexAttribArray(program->vNormalAtribId);
 		GL_CHECK_ERRORS
 
 		// fill texCoord buffer from mesh
@@ -81,14 +80,13 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 2 * mesh->size(), &(mesh->texCoords[0]), GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
 		// attach buffer to correct vertex attribute
-		glVertexAttribPointer(program->texCoordBuffer, 2, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
-		glEnableVertexAttribArray(program->texCoordBuffer);
-		GL_CHECK_ERRORS
+		glVertexAttribPointer(program->vTexCoordAtribId, 2, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
+		glEnableVertexAttribArray(program->vTexCoordAtribId);
+		GL_CHECK_ERRORS*/
 
 		//ship texture2d data
-		glUniform1i(texture->texid, program->textureAttribute);
-
-		//ship cubemap data (?)
+		//glUniform1i(program->textureAtribId, texture->id);
+		//GL_CHECK_ERRORS
 	}
 
 	void draw()
@@ -99,7 +97,7 @@ public:
 
 		glEnable(GL_DEPTH_TEST);
 
-		glUniformMatrix4fv( program->transformAttribute, 1, GL_TRUE, Camera::GetInstance()->GetCameraMatrix() * transform.getTransformMatrix() );
+		glUniformMatrix4fv( program->transformAtribId, 1, GL_TRUE, Camera::GetInstance()->GetCameraMatrix() * transform.getTransformMatrix() );
 		
 		glDrawArrays( GL_TRIANGLES, 0, mesh->size());    // draw the points
 		GL_CHECK_ERRORS
