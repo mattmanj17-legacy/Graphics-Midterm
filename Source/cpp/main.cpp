@@ -16,45 +16,47 @@ using namespace std;
 #include "Shader.h"
 #include "TriMesh.h"
 #include "Transform.h"
+#include "Timer.h"
 
 typedef vec4 point4;
-
-GLfloat  fovy = 60.0;		 // Field-of-view in Y direction angle (in degrees)
-GLfloat  aspect = 1.0;       // Viewport aspect ratio
-GLfloat  zNear = 0.1, zFar = 1000.0;
 
 VertexArrayObject* myVAO;
 TriMesh* quadMesh;
 Shader* quadShader;
 Texture2D* brickTexture;
+Timer* gameclock;
 
 void display( void )
 {
 	glClearColor(1.0,1.0,1.0,1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );  /*clear the window */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	//Camera::GetInstance()->projection = Perspective( fovy, aspect, zNear, zFar );
-	//camera transform
-
+	Camera::GetInstance()->transform.rotateY(90*gameclock->deltaTime,ROTATE_GLOBAL);
+	
 	myVAO->draw();
 
 	glutSwapBuffers();
 }
 
+void idle()
+{
+	gameclock->Update();
+	glutPostRedisplay();
+}
+
 void mouse(int btn, int state, int x, int y)
 {	
-	glutPostRedisplay();
 }
 
 void myReshape(int w, int h)
 {
     glViewport(0, 0, w, h);
-	aspect =  GLfloat (w) / h;
+	Camera::GetInstance()->aspect = GLfloat (w) / h;
 }
 
 void key(unsigned char k, int x, int y)
 {
-    if(k == 'q') exit(0);
+	if(k == 'q') exit(0);
 }
 
 void init_gl()
@@ -62,36 +64,35 @@ void init_gl()
 	glEnable(GL_DEPTH_TEST);
 }
 
-void makeQuad(TriMesh* mesh, vec4 a, vec4 b, vec4 c, vec4 d)
+void makeUnitTexturedQuad(TriMesh* mesh)
 {
-	mesh->addPoint(a, vec2(0,0));
-	mesh->addPoint(b, vec2(0,0));
-	mesh->addPoint(c, vec2(0,0));
-
+	vec4 a(-0.5, 0.5, 0.0, 1.0);	vec4 b(0.5, 0.5, 0.0, 1.0); 
+	 
+	vec4 d(-0.5,-0.5, 0.0, 1.0);	vec4 c(0.5,-0.5, 0.0, 1.0);
+	
+	mesh->addPoint(a, vec2(0,1));
+	mesh->addPoint(c, vec2(1,0));
+	mesh->addPoint(b, vec2(1,1));
+	
 	mesh->addPoint(d, vec2(0,0));
-	mesh->addPoint(a, vec2(0,0));
-	mesh->addPoint(c, vec2(0,0));
+	mesh->addPoint(c, vec2(1,0));
+	mesh->addPoint(a, vec2(0,1));
 }
 
 void init()
 {   
-	init_gl();			   
+	init_gl();
 
-	//work on camera code!!
-	Camera::GetInstance()->projection = Perspective( fovy, aspect, zNear, zFar );
-
-	point4  eye( 0.0, 0.0, -1.0, 0.0 );
-	point4  at( 0.0, 0.0, 0.0, 0.0 );
-	vec4    up( 0.0, 1.0, 0.0, 0.0 );
-
-	Camera::GetInstance()->transformMatrix = LookAt( eye, at, up );
+	gameclock = new Timer();
 
 	quadShader = new Shader("glsl/quad_vshader.glsl","glsl/quad_fshader.glsl");
 	brickTexture = new Texture2D("Brick.bmp");
 	quadMesh = new TriMesh();
-	makeQuad(quadMesh, vec4(-0.5,0.5,0,1), vec4(0.5,0.5,0,1), vec4(0.5,-0.5,0,1), vec4(-0.5,-0.5,0,1));
+	makeUnitTexturedQuad(quadMesh);
 
 	myVAO = new VertexArrayObject(quadMesh, brickTexture, quadShader);
+	
+	myVAO->transform.position.z = -0.5;
 
 	GL_CHECK_ERRORS
 }
@@ -136,8 +137,7 @@ int main(int argc, char **argv)
     init();
     glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
-	//glutIdleFunc(some idle func);       
-	//gluttimerHunc(some timer func);
+	glutIdleFunc(idle);
 	glutMouseFunc(mouse);
     glutKeyboardFunc(key);
     glutMainLoop();

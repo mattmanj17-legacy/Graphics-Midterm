@@ -35,7 +35,6 @@ private:
 
 	GLuint vao;
 	GLuint positionBuffer_id;
-	GLuint normalBuffer_id;
 	GLuint texCoordBuffer_id;
 
 public:
@@ -59,19 +58,8 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * mesh->size(), &(mesh->positions[0]), GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
 		// attach buffer to correct vertex attribute
-		glVertexAttribPointer(program->vPositionAtribId, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
+		glVertexAttribPointer(program->vPositionAtribId, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 		glEnableVertexAttribArray(program->vPositionAtribId);
-		GL_CHECK_ERRORS
-
-		/*// fill normal buffer from mesh
-		glGenBuffers(1, &normalBuffer_id);
-		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer_id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * mesh->size(), &(mesh->normals[0]), GL_STATIC_DRAW);
-		GL_CHECK_ERRORS
-		// attach buffer to correct vertex attribute
-		glVertexAttribPointer(program->vNormalAtribId, 4, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
-		GL_CHECK_ERRORS
-		glEnableVertexAttribArray(program->vNormalAtribId);
 		GL_CHECK_ERRORS
 
 		// fill texCoord buffer from mesh
@@ -80,13 +68,13 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 2 * mesh->size(), &(mesh->texCoords[0]), GL_STATIC_DRAW);
 		GL_CHECK_ERRORS
 		// attach buffer to correct vertex attribute
-		glVertexAttribPointer(program->vTexCoordAtribId, 2, GL_FLOAT, GL_TRUE, sizeof(GLfloat) * 4, BUFFER_OFFSET(0));
+		glVertexAttribPointer(program->vTexCoordAtribId, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 		glEnableVertexAttribArray(program->vTexCoordAtribId);
-		GL_CHECK_ERRORS*/
+		GL_CHECK_ERRORS
 
 		//ship texture2d data
-		//glUniform1i(program->textureAtribId, texture->id);
-		//GL_CHECK_ERRORS
+		glUniform1i(program->textureAtribId, texture->id);
+		GL_CHECK_ERRORS
 	}
 
 	void draw()
@@ -99,7 +87,7 @@ public:
 
 		glUniformMatrix4fv( program->transformAtribId, 1, GL_TRUE, Camera::GetInstance()->GetCameraMatrix() * transform.getTransformMatrix() );
 		
-		glDrawArrays( GL_TRIANGLES, 0, mesh->size());    // draw the points
+		glDrawArrays( GL_TRIANGLES, 0, mesh->size());
 		GL_CHECK_ERRORS
 
 		glUseProgram(0);
@@ -110,8 +98,7 @@ public:
 	~VertexArrayObject()
 	{
 		glDeleteBuffers(1, &positionBuffer_id);
-		glDeleteBuffers(1, &normalBuffer_id);
-		glDeleteBuffers(1, &normalBuffer_id);
+		glDeleteBuffers(1, &texCoordBuffer_id);
 		glDeleteVertexArrays(1, &vao);
 	}
 };

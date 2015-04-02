@@ -26,7 +26,6 @@ public:
 	GLuint textureAtribId;
 
 	GLuint vPositionAtribId;
-	GLuint vNormalAtribId;
 	GLuint vTexCoordAtribId;
 
 	GLuint id;
@@ -48,10 +47,9 @@ public:
 
 		vPositionAtribId = glGetAttribLocation(id, "vPosition");
 		GL_CHECK_ERRORS
-		vNormalAtribId = glGetUniformLocation(id, "vNormal");
+		vTexCoordAtribId = glGetAttribLocation(id, "vTexCoord");
 		GL_CHECK_ERRORS
-		vTexCoordAtribId = glGetUniformLocation(id, "vTexCoord");
-		GL_CHECK_ERRORS
+		
 	}
 
 	~Shader()

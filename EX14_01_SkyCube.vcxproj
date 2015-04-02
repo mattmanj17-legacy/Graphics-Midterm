@@ -29,6 +29,7 @@
     <ClInclude Include="Source\Header\Shader.h" />
     <ClInclude Include="Source\Header\texture.h" />
     <ClInclude Include="Source\Header\Texture2D.h" />
+    <ClInclude Include="Source\Header\Timer.h" />
     <ClInclude Include="Source\Header\Transform.h" />
     <ClInclude Include="Source\Header\TriMesh.h" />
     <ClInclude Include="Source\Header\vec.h" />
