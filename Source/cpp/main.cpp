@@ -17,6 +17,7 @@ using namespace std;
 #include "TriMesh.h"
 #include "Transform.h"
 #include "Timer.h"
+#include "Mouse.h"
 
 typedef vec4 point4;
 
@@ -25,14 +26,16 @@ TriMesh* quadMesh;
 Shader* quadShader;
 Texture2D* brickTexture;
 Timer* gameclock;
+Mouse* gameMouse;
+
+int windowWidth = 500;
+int windowHeight = 500;
 
 void display( void )
 {
 	glClearColor(1.0,1.0,1.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	Camera::GetInstance()->transform.rotateY(90*gameclock->deltaTime,ROTATE_GLOBAL);
-	
 	myVAO->draw();
 
 	glutSwapBuffers();
@@ -41,6 +44,13 @@ void display( void )
 void idle()
 {
 	gameclock->Update();
+
+	float mouseDragX = gameMouse->deltaPos.x/10;
+	float mouseDragY = gameMouse->deltaPos.y/10;
+	
+	Camera::GetInstance()->transform.rotateY(-90*gameclock->deltaTime*mouseDragX,ROTATE_GLOBAL);
+	Camera::GetInstance()->transform.rotateX(-180*gameclock->deltaTime*mouseDragY,ROTATE_LOCAL);
+
 	glutPostRedisplay();
 }
 
@@ -48,10 +58,17 @@ void mouse(int btn, int state, int x, int y)
 {	
 }
 
+void mouseMove(int x, int y)
+{
+	gameMouse->updatePosition(x, y, windowWidth, windowHeight);
+}
+
 void myReshape(int w, int h)
 {
     glViewport(0, 0, w, h);
 	Camera::GetInstance()->aspect = GLfloat (w) / h;
+	windowWidth = w;
+	windowHeight = h;
 }
 
 void key(unsigned char k, int x, int y)
@@ -84,6 +101,7 @@ void init()
 	init_gl();
 
 	gameclock = new Timer();
+	gameMouse = new Mouse();
 
 	quadShader = new Shader("glsl/quad_vshader.glsl","glsl/quad_fshader.glsl");
 	brickTexture = new Texture2D("Brick.bmp");
@@ -124,13 +142,19 @@ void checkGlew()
 	cout<<"GLSL: "<<glGetString (GL_SHADING_LANGUAGE_VERSION)<<endl;
 }
 
+//void setMouse(int _)
+//{
+//	glutWarpPointer(250,250);
+//	glutTimerFunc(100, setMouse, 0);
+//}
+
 int main(int argc, char **argv)
 {
 	atexit(OnShutdown);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(windowWidth, windowHeight);
 
     glutCreateWindow( "Maze" );
 	checkGlew();
@@ -139,7 +163,11 @@ int main(int argc, char **argv)
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutMouseFunc(mouse);
+	glutPassiveMotionFunc(mouseMove);
+	//glutTimerFunc(100, setMouse, 0);
     glutKeyboardFunc(key);
+	glutWarpPointer(windowWidth/2,windowHeight/2);
+	glutSetCursor(GLUT_CURSOR_NONE);
     glutMainLoop();
 
     return 0;

@@ -26,6 +26,7 @@
     <ClInclude Include="Source\Header\Camera.h" />
     <ClInclude Include="Source\Header\CheckError.h" />
     <ClInclude Include="Source\Header\mat.h" />
+    <ClInclude Include="Source\Header\Mouse.h" />
     <ClInclude Include="Source\Header\Shader.h" />
     <ClInclude Include="Source\Header\texture.h" />
     <ClInclude Include="Source\Header\Texture2D.h" />
