@@ -7,8 +7,10 @@
 class Camera
 {
 private:
+	// delete other constructors to prevent singleton construction
 	Camera(Camera const&);
 	void operator=(Camera const&);
+	
 	Camera()
 	{
 		fovy = 45.0;
@@ -17,6 +19,7 @@ private:
 		zFar = 1000.0;
 	}
 
+	// convert camera transform into viewing matrix
 	mat4 transformMatrix()
 	{
 		vec4 eye = transform.position;
@@ -27,6 +30,7 @@ private:
 	}
 
 public:
+	//return singleton instance
 	static Camera* GetInstance()
 	{
 		static Camera instance;
@@ -35,10 +39,11 @@ public:
 	}
 
 	Transform transform;
-	GLfloat  fovy;		 // Field-of-view in Y direction angle (in degrees)
-	GLfloat  aspect;       // Viewport aspect ratio
+	GLfloat  fovy;
+	GLfloat  aspect;
 	GLfloat  zNear, zFar;
 
+	// return product of perspective matrix and transform matrix
 	mat4 GetCameraMatrix()
 	{
 		return Perspective( fovy, aspect, zNear, zFar ) * transformMatrix();

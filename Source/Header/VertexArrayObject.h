@@ -38,7 +38,7 @@ private:
 	GLuint texCoordBuffer_id;
 
 public:
-	Transform transform;
+	//Transform transform;
 
 	VertexArrayObject(TriMesh* Mesh, Texture2D* Texture, Shader* Program)
 	{
@@ -49,8 +49,6 @@ public:
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 		GL_CHECK_ERRORS
-
-		glUseProgram(program->id);
 
 		// fill position buffer from mesh
 		glGenBuffers(1, &positionBuffer_id);
@@ -71,21 +69,18 @@ public:
 		glVertexAttribPointer(program->vTexCoordAtribId, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 		glEnableVertexAttribArray(program->vTexCoordAtribId);
 		GL_CHECK_ERRORS
-
-		//ship texture2d data
-		glUniform1i(program->textureAtribId, texture->id);
-		GL_CHECK_ERRORS
 	}
 
-	void draw()
+	void drawAt(Transform at)
 	{
 		glBindVertexArray( vao );
 		glUseProgram(program->id);
-		texture->setActive();
 
-		glEnable(GL_DEPTH_TEST);
+		//ship texture2d data
+		glUniform1i(program->textureAtribId, texture->id);
 
-		glUniformMatrix4fv( program->transformAtribId, 1, GL_TRUE, Camera::GetInstance()->GetCameraMatrix() * transform.getTransformMatrix() );
+		//ship transform matrix
+		glUniformMatrix4fv( program->transformAtribId, 1, GL_TRUE, Camera::GetInstance()->GetCameraMatrix() * at.getTransformMatrix() );
 		
 		glDrawArrays( GL_TRIANGLES, 0, mesh->size());
 		GL_CHECK_ERRORS

@@ -37,19 +37,12 @@ public:
 		
 		id  = InitShader(vShader.c_str(), fShader.c_str());
 		GL_CHECK_ERRORS
-		glUseProgram(id);
-		GL_CHECK_ERRORS
 
 		transformAtribId = glGetUniformLocation(id, "Transform");
-		GL_CHECK_ERRORS
 		textureAtribId = glGetUniformLocation(id, "Tex");
-		GL_CHECK_ERRORS
 
 		vPositionAtribId = glGetAttribLocation(id, "vPosition");
-		GL_CHECK_ERRORS
 		vTexCoordAtribId = glGetAttribLocation(id, "vTexCoord");
-		GL_CHECK_ERRORS
-		
 	}
 
 	~Shader()

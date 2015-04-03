@@ -25,14 +25,12 @@ public:
 			x = w - 200; 
 			glutWarpPointer(x,y); 
 			positionSet = false;
-			//deltaPos = vec2(0,0);
 		}
 		else if(x > w - 200)
 		{ 
 			x = 200; 
 			glutWarpPointer(x,y); 
 			positionSet = false;
-			//deltaPos = vec2(0,0);
 		}
 		
 		if(y < 200)
@@ -40,14 +38,12 @@ public:
 			y = w - 200; 
 			glutWarpPointer(x,y);
 			positionSet = false;
-			//deltaPos = vec2(0,0);
 		}
 		else if(y > w - 200)
 		{ 
 			y = 200; 
 			glutWarpPointer(x,y);
 			positionSet = false;
-			//deltaPos = vec2(0,0);
 		}
 		
 		if(positionSet)

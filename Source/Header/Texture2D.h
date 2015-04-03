@@ -27,29 +27,10 @@ public:
 	{
 		fileName = fName;
 		glActiveTexture(currentTextureUnit);
-		GL_CHECK_ERRORS
 		glGenTextures(1, &id);
-		GL_CHECK_ERRORS
 		glBindTexture(GL_TEXTURE_2D, id);
-		GL_CHECK_ERRORS
 		textureUnit = MyLoadBitmap(fileName, GL_TEXTURE_2D , true);
 		GL_CHECK_ERRORS
-	}
-
-	void setActive()
-	{
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(textureUnit);
-		GL_CHECK_ERRORS
-		glBindTexture(GL_TEXTURE_2D, id);
-		GL_CHECK_ERRORS
-
-		glEnable(GL_BLEND);
-	    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	    // Prevent alpha values of less than 0.1 from writing out the the depth test buffer.
-	    glAlphaFunc ( GL_GREATER, 0.1 ) ;
-        glEnable ( GL_ALPHA_TEST ) ;
 	}
 
 	~Texture2D()

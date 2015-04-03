@@ -21,12 +21,18 @@ using namespace std;
 
 typedef vec4 point4;
 
-VertexArrayObject* myVAO;
-TriMesh* quadMesh;
+VertexArrayObject* wallVAO;
+VertexArrayObject* treeVAO;
+TriMesh* brickMesh;
+TriMesh* treeMesh;
 Shader* quadShader;
 Texture2D* brickTexture;
+Texture2D* treeTexture;
 Timer* gameclock;
 Mouse* gameMouse;
+
+vector<Transform> walls;
+vector<Transform> trees;
 
 int windowWidth = 500;
 int windowHeight = 500;
@@ -36,13 +42,20 @@ bool sDown = false;
 bool aDown = false;
 bool dDown = false;
 
-
 void display( void )
 {
 	glClearColor(1.0,1.0,1.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	myVAO->draw();
+	for(int i = 0; i< walls.size(); i++)
+	{
+		wallVAO->drawAt(walls[i]);
+	}
+
+	for(int i = 0; i< trees.size(); i++)
+	{
+		treeVAO->drawAt(trees[i]);
+	}
 
 	glutSwapBuffers();
 }
@@ -71,21 +84,17 @@ void idle()
 		vec4 forward = Camera::GetInstance()->transform.forward();
 		forward.y = 0;
 		forward = normalize(forward);
-		Camera::GetInstance()->transform.position -= forward*gameclock->deltaTime;
+		Camera::GetInstance()->transform.position -= forward*gameclock->deltaTime*1.5;
 	}
 	else if(sDown)
 	{
 		vec4 forward = Camera::GetInstance()->transform.forward();
 		forward.y = 0;
 		forward = normalize(forward);
-		Camera::GetInstance()->transform.position += forward*gameclock->deltaTime;
+		Camera::GetInstance()->transform.position += forward*gameclock->deltaTime*1.5;
 	}
 
 	glutPostRedisplay();
-}
-
-void mouse(int btn, int state, int x, int y)
-{	
 }
 
 void mouseMove(int x, int y)
@@ -122,9 +131,18 @@ void keyUp(unsigned char k, int x, int y)
 void init_gl()
 {
 	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_TEXTURE_2D);
+
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Prevent alpha values of less than 0.1 from writing out the the depth test buffer.
+	glAlphaFunc ( GL_GREATER, 0.1 ) ;
+    glEnable ( GL_ALPHA_TEST ) ;
 }
 
-void makeUnitTexturedQuad(TriMesh* mesh)
+void makeBrickMesh(TriMesh* mesh)
 {
 	vec4 a(-0.5, 0.5, 0.0, 1.0);	vec4 b(0.5, 0.5, 0.0, 1.0); 
 	 
@@ -139,29 +157,133 @@ void makeUnitTexturedQuad(TriMesh* mesh)
 	mesh->addPoint(a, vec2(0,1));
 }
 
+void makeTreeMesh(TriMesh* mesh)
+{
+	vec4 a(-0.25, 0.5, 0.0, 1.0);	vec4 b(0.25, 0.5, 0.0, 1.0); 
+	 
+	vec4 d(-0.25,-0.5, 0.0, 1.0);	vec4 c(0.25,-0.5, 0.0, 1.0);
+
+	mesh->addPoint(a, vec2(0,1));
+	mesh->addPoint(c, vec2(0.5,0));
+	mesh->addPoint(b, vec2(0.5,1));
+	
+	mesh->addPoint(d, vec2(0,0));
+	mesh->addPoint(c, vec2(0.5,0));
+	mesh->addPoint(a, vec2(0,1));
+
+	vec4 a0(0.0, 0.5,-0.25, 1.0);	vec4 b0(0.0, 0.5, 0.25, 1.0); 
+	 
+	vec4 d0(0.0,-0.5,-0.25, 1.0);	vec4 c0(0.0,-0.5, 0.25, 1.0);
+
+	mesh->addPoint(a0, vec2(0.5,1));
+	mesh->addPoint(c0, vec2(1,0));
+	mesh->addPoint(b0, vec2(1,1));
+	
+	mesh->addPoint(d0, vec2(0.5,0));
+	mesh->addPoint(c0, vec2(1,0));
+	mesh->addPoint(a0, vec2(0.5,1));
+}
+
 void init()
 {   
 	init_gl();
+
+	srand(time(NULL));
 
 	gameclock = new Timer();
 	gameMouse = new Mouse();
 
 	quadShader = new Shader("glsl/quad_vshader.glsl","glsl/quad_fshader.glsl");
-	brickTexture = new Texture2D("Brick.bmp");
-	quadMesh = new TriMesh();
-	makeUnitTexturedQuad(quadMesh);
-
-	myVAO = new VertexArrayObject(quadMesh, brickTexture, quadShader);
 	
-	myVAO->transform.position.z = -0.5;
+	brickTexture = new Texture2D("Brick.bmp");
+	treeTexture = new Texture2D("trees.bmp");
+
+	brickMesh = new TriMesh();
+	makeBrickMesh(brickMesh);
+
+	treeMesh = new TriMesh();
+	makeTreeMesh(treeMesh);
+
+	treeVAO = new VertexArrayObject(treeMesh, treeTexture, quadShader);
+	wallVAO = new VertexArrayObject(brickMesh, brickTexture, quadShader);
+	
+	//10 random trees
+	for(int i = 0; i < 10; i++)
+	{
+		vec4 pos;
+		pos.w = 1;
+
+		float rot = 0;
+		
+		pos.x = rand()%900;
+		pos.x /= 100;
+
+		pos.z = rand()%900;
+		pos.z /= 100;
+
+		rot = rand()%9000;
+		rot /= 100;
+
+		trees.push_back(Transform());
+		trees[trees.size() - 1].position = pos;
+		trees[trees.size() - 1].rotateY(rot, ROTATE_GLOBAL);
+	}
+
+	//z- wall
+	for(int i = 0; i < 10; i++)
+	{
+		walls.push_back(Transform());
+		walls[walls.size() - 1].position.z = -0.5;
+		walls[walls.size() - 1].position.x = i; 
+	}
+
+	//z+ wall
+	for(int i = 0; i < 10; i++)
+	{
+		walls.push_back(Transform());
+		walls[walls.size() - 1].position.z = 9.5;
+		walls[walls.size() - 1].position.x = i; 
+	}
+
+	//x- wall
+	for(int i = 0; i < 10; i++)
+	{
+		walls.push_back(Transform());
+		walls[walls.size() - 1].position.x = -0.5;
+		walls[walls.size() - 1].position.z = i;
+		walls[walls.size() - 1].rotateY(90,ROTATE_GLOBAL);
+	}
+
+	//x+ wall
+	for(int i = 0; i < 10; i++)
+	{
+		walls.push_back(Transform());
+		walls[walls.size() - 1].position.x = 9.5;
+		walls[walls.size() - 1].position.z = i;
+		walls[walls.size() - 1].rotateY(90,ROTATE_GLOBAL);
+	}
+
+	//y- floor
+	for(int i = 0; i < 10; i++)
+	{
+		for(int j = 0; j < 10; j++)
+		{
+			walls.push_back(Transform());
+			walls[walls.size() - 1].position.y = -0.5;
+			walls[walls.size() - 1].position.x = i;
+			walls[walls.size() - 1].position.z = j;
+			walls[walls.size() - 1].rotateX(90,ROTATE_GLOBAL);
+		}
+	}
 
 	GL_CHECK_ERRORS
 }
 
 void OnShutdown()
 {
-	delete myVAO;
-	delete quadMesh;
+	// deleat everything
+	delete wallVAO;
+	delete brickMesh;
 	delete quadShader;
 	delete brickTexture;
 }
@@ -185,12 +307,6 @@ void checkGlew()
 	cout<<"GLSL: "<<glGetString (GL_SHADING_LANGUAGE_VERSION)<<endl;
 }
 
-//void setMouse(int _)
-//{
-//	glutWarpPointer(250,250);
-//	glutTimerFunc(100, setMouse, 0);
-//}
-
 int main(int argc, char **argv)
 {
 	atexit(OnShutdown);
@@ -205,9 +321,7 @@ int main(int argc, char **argv)
     glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
-	glutMouseFunc(mouse);
 	glutPassiveMotionFunc(mouseMove);
-	//glutTimerFunc(100, setMouse, 0);
     glutKeyboardFunc(key);
 	glutKeyboardUpFunc(keyUp);
 	glutWarpPointer(windowWidth/2,windowHeight/2);
