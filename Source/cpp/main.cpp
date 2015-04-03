@@ -31,6 +31,12 @@ Mouse* gameMouse;
 int windowWidth = 500;
 int windowHeight = 500;
 
+bool wDown = false;
+bool sDown = false;
+bool aDown = false;
+bool dDown = false;
+
+
 void display( void )
 {
 	glClearColor(1.0,1.0,1.0,1.0);
@@ -50,6 +56,30 @@ void idle()
 	
 	Camera::GetInstance()->transform.rotateY(-90*gameclock->deltaTime*mouseDragX,ROTATE_GLOBAL);
 	Camera::GetInstance()->transform.rotateX(-180*gameclock->deltaTime*mouseDragY,ROTATE_LOCAL);
+
+	if(aDown)
+	{
+		Camera::GetInstance()->transform.position -= Camera::GetInstance()->transform.right()*gameclock->deltaTime;
+	}
+	else if(dDown)
+	{
+		Camera::GetInstance()->transform.position += Camera::GetInstance()->transform.right()*gameclock->deltaTime;
+	}
+
+	if(wDown)
+	{
+		vec4 forward = Camera::GetInstance()->transform.forward();
+		forward.y = 0;
+		forward = normalize(forward);
+		Camera::GetInstance()->transform.position -= forward*gameclock->deltaTime;
+	}
+	else if(sDown)
+	{
+		vec4 forward = Camera::GetInstance()->transform.forward();
+		forward.y = 0;
+		forward = normalize(forward);
+		Camera::GetInstance()->transform.position += forward*gameclock->deltaTime;
+	}
 
 	glutPostRedisplay();
 }
@@ -73,7 +103,20 @@ void myReshape(int w, int h)
 
 void key(unsigned char k, int x, int y)
 {
+	if(k == 'w') wDown = true;
+	if(k == 's') sDown = true;
+	if(k == 'a') aDown = true;
+	if(k == 'd') dDown = true;
+	
 	if(k == 'q') exit(0);
+}
+
+void keyUp(unsigned char k, int x, int y)
+{
+	if(k == 'w') wDown = false;
+	if(k == 's') sDown = false;
+	if(k == 'a') aDown = false;
+	if(k == 'd') dDown = false;
 }
 
 void init_gl()
@@ -166,6 +209,7 @@ int main(int argc, char **argv)
 	glutPassiveMotionFunc(mouseMove);
 	//glutTimerFunc(100, setMouse, 0);
     glutKeyboardFunc(key);
+	glutKeyboardUpFunc(keyUp);
 	glutWarpPointer(windowWidth/2,windowHeight/2);
 	glutSetCursor(GLUT_CURSOR_NONE);
     glutMainLoop();
