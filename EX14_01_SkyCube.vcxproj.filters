@@ -41,6 +41,8 @@
     <None Include=".gitignore" />
     <None Include="Assets\glsl\quad_fshader.glsl" />
     <None Include="Assets\glsl\quad_vshader.glsl" />
+    <None Include="Assets\glsl\Skybox_vshader.glsl" />
+    <None Include="Assets\glsl\Skybox_fshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Header\Angel.h">
@@ -80,6 +82,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Header\Mouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\GraphicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header\SkyBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

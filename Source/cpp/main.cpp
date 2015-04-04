@@ -18,18 +18,23 @@ using namespace std;
 #include "Transform.h"
 #include "Timer.h"
 #include "Mouse.h"
-
-typedef vec4 point4;
+#include "SkyBox.h"
 
 VertexArrayObject* wallVAO;
 VertexArrayObject* treeVAO;
+
 TriMesh* brickMesh;
 TriMesh* treeMesh;
+
 Shader* quadShader;
+
 Texture2D* brickTexture;
 Texture2D* treeTexture;
+
 Timer* gameclock;
 Mouse* gameMouse;
+
+SkyBox skybox;
 
 vector<Transform> walls;
 vector<Transform> trees;
@@ -37,6 +42,7 @@ vector<Transform> trees;
 int windowWidth = 500;
 int windowHeight = 500;
 
+// wasd key states
 bool wDown = false;
 bool sDown = false;
 bool aDown = false;
@@ -47,29 +53,45 @@ void display( void )
 	glClearColor(1.0,1.0,1.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+	// draw all walls
 	for(int i = 0; i< walls.size(); i++)
 	{
 		wallVAO->drawAt(walls[i]);
 	}
 
+	// draw all trees
 	for(int i = 0; i< trees.size(); i++)
 	{
 		treeVAO->drawAt(trees[i]);
 	}
 
+	// draw the skybox
+	skybox.draw();
+
 	glutSwapBuffers();
+}
+
+// helper function to make sure a given value is bouded between two numbers
+float clamp(float low, float high, float value)
+{
+	if(value < low) return low;
+	if(value > high) return high;
+	return value;
 }
 
 void idle()
 {
+	//tick
 	gameclock->Update();
 
+	// rotate camera based on mouse movement
 	float mouseDragX = gameMouse->deltaPos.x/10;
 	float mouseDragY = gameMouse->deltaPos.y/10;
 	
 	Camera::GetInstance()->transform.rotateY(-90*gameclock->deltaTime*mouseDragX,ROTATE_GLOBAL);
 	Camera::GetInstance()->transform.rotateX(-180*gameclock->deltaTime*mouseDragY,ROTATE_LOCAL);
 
+	// go left and right
 	if(aDown)
 	{
 		Camera::GetInstance()->transform.position -= Camera::GetInstance()->transform.right()*gameclock->deltaTime;
@@ -79,6 +101,7 @@ void idle()
 		Camera::GetInstance()->transform.position += Camera::GetInstance()->transform.right()*gameclock->deltaTime;
 	}
 
+	// go forward and backwaard
 	if(wDown)
 	{
 		vec4 forward = Camera::GetInstance()->transform.forward();
@@ -94,8 +117,14 @@ void idle()
 		Camera::GetInstance()->transform.position += forward*gameclock->deltaTime*1.5;
 	}
 
+	// clamp camera posistion inside the level
+	Camera::GetInstance()->transform.position.x = clamp(0, 9, Camera::GetInstance()->transform.position.x);
+	Camera::GetInstance()->transform.position.z = clamp(0, 9, Camera::GetInstance()->transform.position.z);
+
 	glutPostRedisplay();
 }
+
+
 
 void mouseMove(int x, int y)
 {
@@ -193,19 +222,33 @@ void init()
 	gameclock = new Timer();
 	gameMouse = new Mouse();
 
+	//use kent's skybox
+	skybox.init_data();
+	skybox.init_VAO();
+	skybox.init_VBO();
+	skybox.init_shader();
+	skybox.init_texture_map();
+
+	// load my shader
 	quadShader = new Shader("glsl/quad_vshader.glsl","glsl/quad_fshader.glsl");
 	
+	// load textures
 	brickTexture = new Texture2D("Brick.bmp");
 	treeTexture = new Texture2D("trees.bmp");
 
+	//generat meshes
 	brickMesh = new TriMesh();
 	makeBrickMesh(brickMesh);
 
 	treeMesh = new TriMesh();
 	makeTreeMesh(treeMesh);
 
+	// creat tree and wall voa's
 	treeVAO = new VertexArrayObject(treeMesh, treeTexture, quadShader);
 	wallVAO = new VertexArrayObject(brickMesh, brickTexture, quadShader);
+
+	// rotate camera to point into the level
+	Camera::GetInstance()->transform.rotateY(-90 - 45,ROTATE_GLOBAL);
 	
 	//10 random trees
 	for(int i = 0; i < 10; i++)
@@ -283,9 +326,18 @@ void OnShutdown()
 {
 	// deleat everything
 	delete wallVAO;
+	delete treeVAO;
+
 	delete brickMesh;
+	delete treeMesh;
+
 	delete quadShader;
+
 	delete brickTexture;
+	delete treeTexture;
+
+	delete gameclock;
+	delete gameMouse;
 }
 
 void checkGlew()

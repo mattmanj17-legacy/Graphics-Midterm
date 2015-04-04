@@ -46,6 +46,7 @@ public:
 		texture = Texture;
 		program = Program;
 		
+		// creat vao
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 		GL_CHECK_ERRORS

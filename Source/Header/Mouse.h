@@ -20,6 +20,9 @@ public:
 
 	void updatePosition(int x, int y, int w , int h)
 	{
+		// keep the pointer 200 px from the edge of the screen
+		// if the pointer goes out side this range, move it to the other side of screen
+		// and dont record a delta for this frame
 		if(x < 200)
 		{ 
 			x = w - 200; 
@@ -46,15 +49,18 @@ public:
 			positionSet = false;
 		}
 		
+		// update deltapos
 		if(positionSet)
 		{
 			deltaPos.x = x - position.x;
 			deltaPos.y = y - position.y;
 
+			// deadzone
 			if(abs(deltaPos.x) < 2) deltaPos.x = 0;
 			if(abs(deltaPos.y) < 2) deltaPos.y = 0;
 		}
 		
+		// update position
 		position.x = x;
 		position.y = y;
 		positionSet = true;

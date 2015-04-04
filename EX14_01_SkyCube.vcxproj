@@ -20,14 +20,18 @@
     <None Include=".gitignore" />
     <None Include="Assets\glsl\quad_fshader.glsl" />
     <None Include="Assets\glsl\quad_vshader.glsl" />
+    <None Include="Assets\glsl\Skybox_fshader.glsl" />
+    <None Include="Assets\glsl\Skybox_vshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Header\Angel.h" />
     <ClInclude Include="Source\Header\Camera.h" />
     <ClInclude Include="Source\Header\CheckError.h" />
+    <ClInclude Include="Source\Header\GraphicsObject.h" />
     <ClInclude Include="Source\Header\mat.h" />
     <ClInclude Include="Source\Header\Mouse.h" />
     <ClInclude Include="Source\Header\Shader.h" />
+    <ClInclude Include="Source\Header\SkyBox.h" />
     <ClInclude Include="Source\Header\texture.h" />
     <ClInclude Include="Source\Header\Texture2D.h" />
     <ClInclude Include="Source\Header\Timer.h" />

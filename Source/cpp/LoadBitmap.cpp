@@ -111,5 +111,5 @@ int MyLoadCubeMapBitmap(char *filename, GLenum  target )
 
     free(l_texture); // Free the memory we used to load the texture
 
-    return (currentTextureUnit++); // Returns the current texture OpenGL ID and increments
+    return (currentTextureUnit); // Returns the current texture OpenGL ID and increments
 }

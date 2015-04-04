@@ -7,6 +7,8 @@ using namespace std::chrono;
 class Timer
 {
 private:
+	// max_dt makes sure that the timer dosnt have a dt outside of a resonble range.
+	// this is usfull when debugging
 	float max_dt;
 	long long currentTime_ms;
 
@@ -37,7 +39,6 @@ public:
 		currentTime_ms = millis;
 		currentTime = (float)millis / 1000;
 	}
-
 };
 
 #endif
