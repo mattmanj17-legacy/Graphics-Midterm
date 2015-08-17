@@ -15,7 +15,7 @@ private:
 	{
 		fovy = 45.0;
 		aspect = 1.0;
-		zNear = 0.1;
+		zNear = 0.01;
 		zFar = 1000.0;
 	}
 
@@ -23,6 +23,7 @@ private:
 	mat4 transformMatrix()
 	{
 		vec4 eye = transform.position;
+		//eye.z += 1;
 		vec4 at =  eye + transform.rotation * -vForward;
 		vec4 up = transform.rotation * vUp;
 		
@@ -46,7 +47,8 @@ public:
 	// return product of perspective matrix and transform matrix
 	mat4 GetCameraMatrix()
 	{
-		return Perspective( fovy, aspect, zNear, zFar ) * transformMatrix();
+		return Perspective( fovy, aspect, zNear, zFar ) * Translate( 0.0, 0.0, 1) * transformMatrix();
+		//return Perspective( fovy, aspect, zNear, zFar ) * transformMatrix();
 	}
 };
 

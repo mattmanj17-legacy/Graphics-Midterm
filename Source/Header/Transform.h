@@ -27,7 +27,7 @@ public:
 	
 	mat4 getTransformMatrix()
 	{
-		return Translate(position)  * rotation * Scale(scale);
+		return Translate(position) * rotation * Scale(scale);
 	};
 
 	void rotateX(float angle, bool relativeTo)

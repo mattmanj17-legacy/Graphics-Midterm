@@ -118,8 +118,8 @@ void idle()
 	}
 
 	// clamp camera posistion inside the level
-	Camera::GetInstance()->transform.position.x = clamp(0, 9, Camera::GetInstance()->transform.position.x);
-	Camera::GetInstance()->transform.position.z = clamp(0, 9, Camera::GetInstance()->transform.position.z);
+	Camera::GetInstance()->transform.position.x = clamp(0.5, 8.5, Camera::GetInstance()->transform.position.x);
+	Camera::GetInstance()->transform.position.z = clamp(0.5, 8.5, Camera::GetInstance()->transform.position.z);
 
 	glutPostRedisplay();
 }
@@ -318,6 +318,8 @@ void init()
 			walls[walls.size() - 1].rotateX(90,ROTATE_GLOBAL);
 		}
 	}
+
+	Camera::GetInstance()->transform.position.y += 0.1;
 
 	GL_CHECK_ERRORS
 }
